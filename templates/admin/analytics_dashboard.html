@@ -1,0 +1,137 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<style>
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+  .stat-card { background: #1f2833; border: 1px solid #3b4252; border-radius: 8px; padding: 1.2rem; text-align: center; }
+  .stat-card .val { font-size: 2rem; font-weight: 700; color: #66fcf1; display: block; }
+  .stat-card .lbl { font-size: 0.8rem; color: #8b9eb7; margin-top: 0.3rem; }
+  .dash-section { background: #1f2833; border: 1px solid #3b4252; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .dash-section h2 { color: #66fcf1; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid #3b4252; padding-bottom: 0.5rem; }
+  .dash-table { width: 100%; border-collapse: collapse; }
+  .dash-table th { text-align: left; color: #8b9eb7; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.4rem 0.6rem; }
+  .dash-table td { padding: 0.5rem 0.6rem; border-top: 1px solid #3b4252; color: #e0e6ed; font-size: 0.9rem; }
+  .dash-table tr:hover td { background: rgba(102,252,241,0.05); }
+  .bar { height: 6px; background: rgba(102,252,241,0.15); border-radius: 3px; margin-top: 0.3rem; }
+  .bar-fill { height: 6px; background: #66fcf1; border-radius: 3px; }
+  body { background: #0b0c10; color: #e0e6ed; }
+  #content { background: #0b0c10; }
+  h1 { color: #e0e6ed !important; }
+</style>
+
+<h1>📊 Analytics Dashboard</h1>
+
+<!-- Summary Stats -->
+<div class="dash-grid">
+  <div class="stat-card">
+    <span class="val">{{ total_visits }}</span>
+    <span class="lbl">Total Visits</span>
+  </div>
+  <div class="stat-card">
+    <span class="val">{{ visits_7d }}</span>
+    <span class="lbl">Visits (7 days)</span>
+  </div>
+  <div class="stat-card">
+    <span class="val">{{ visits_30d }}</span>
+    <span class="lbl">Visits (30 days)</span>
+  </div>
+  <div class="stat-card">
+    <span class="val">{{ total_clicks }}</span>
+    <span class="lbl">Button Clicks</span>
+  </div>
+  <div class="stat-card">
+    <span class="val">{{ total_messages }}</span>
+    <span class="lbl">Messages Received</span>
+  </div>
+  <div class="stat-card">
+    <span class="val">{{ messages_30d }}</span>
+    <span class="lbl">Messages (30 days)</span>
+  </div>
+</div>
+
+<!-- Top Pages -->
+<div class="dash-section">
+  <h2>📄 Top Pages by Visits</h2>
+  {% if top_pages %}
+  {% with max_count=top_pages.0.count %}
+  <table class="dash-table">
+    <thead><tr><th>Page</th><th>Visits</th><th style="width:40%">Bar</th></tr></thead>
+    <tbody>
+    {% for p in top_pages %}
+      <tr>
+        <td>{{ p.page }}</td>
+        <td><strong>{{ p.count }}</strong></td>
+        <td>
+          <div class="bar"><div class="bar-fill animate-width" data-width="{% widthratio p.count max_count 100 %}"></div></div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endwith %}
+  {% else %}
+  <p style="color:#8b9eb7">No visit data yet.</p>
+  {% endif %}
+</div>
+
+<!-- Button Clicks -->
+<div class="dash-section">
+  <h2>🖱️ Top Button Clicks</h2>
+  {% if top_buttons %}
+  {% with max_count=top_buttons.0.count %}
+  <table class="dash-table">
+    <thead><tr><th>Button</th><th>Page</th><th>Clicks</th><th style="width:30%">Bar</th></tr></thead>
+    <tbody>
+    {% for b in top_buttons %}
+      <tr>
+        <td>{{ b.button_label|default:b.button_id }}</td>
+        <td style="color:#8b9eb7;font-size:0.82rem">{{ b.page }}</td>
+        <td><strong>{{ b.count }}</strong></td>
+        <td>
+          <div class="bar"><div class="bar-fill animate-width" data-width="{% widthratio b.count max_count 100 %}"></div></div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endwith %}
+  {% else %}
+  <p style="color:#8b9eb7">No click data yet.</p>
+  {% endif %}
+</div>
+
+<!-- Section Engagement -->
+<div class="dash-section">
+  <h2>⏱️ Average Time per Section</h2>
+  {% if section_stats %}
+  {% with max_time=section_stats.0.avg_time %}
+  <table class="dash-table">
+    <thead><tr><th>Section</th><th>Avg Time (s)</th><th>Sessions</th><th style="width:30%">Bar</th></tr></thead>
+    <tbody>
+    {% for s in section_stats %}
+      <tr>
+        <td>#{{ s.section_id }}</td>
+        <td><strong>{{ s.avg_time|floatformat:1 }}s</strong></td>
+        <td>{{ s.visits }}</td>
+        <td>
+          <div class="bar"><div class="bar-fill animate-width" data-width="{% widthratio s.avg_time max_time 100 %}"></div></div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endwith %}
+  {% else %}
+  <p style="color:#8b9eb7">No section engagement data yet.</p>
+  {% endif %}
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.animate-width').forEach(el => {
+      const width = el.getAttribute('data-width');
+      el.style.width = width + '%';
+    });
+  });
+</script>
+{% endblock %}
