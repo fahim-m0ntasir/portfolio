@@ -26,9 +26,35 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-**gau=z9(=so(2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-# Use environment variable for allowed hosts or fallback to open access (only do this for local dev!)
-allowed_hosts_env = os.environ.get('DJANGO_ALLOWED_HOSTS')
-ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else ['*']
+# --- ALLOWED_HOSTS Configuration ---
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Parse custom domains from environment variable
+env_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
+if env_hosts:
+    ALLOWED_HOSTS.extend([host.strip() for host in env_hosts.split(',') if host.strip()])
+
+# Render auto-provides this environment variable
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
+
+# Hardcode fallback primary domains just in case ENV varies
+fallback_domains = [
+    'fahimmontasir.pro.bd',
+    'www.fahimmontasir.pro.bd',
+    'fahimmontasir.onrender.com'
+]
+for domain in fallback_domains:
+    if domain not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(domain)
+
+# --- CSRF Configuration ---
+# Automatically prefix all non-localhost ALLOWED_HOSTS with https://
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in ALLOWED_HOSTS 
+    if host not in ['localhost', '127.0.0.1']
+]
 
 
 # Application definition
