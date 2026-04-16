@@ -581,7 +581,7 @@
             }
 
             .hero-text h1 {
-                font-size: 2.2rem;
+                font-size: clamp(2rem, 6vw, 3.5rem);
             }
 
             .hero-text .subtitle {
@@ -632,15 +632,29 @@
                 gap: 2rem;
             }
 
-            /* Smaller hero h1 on tiny phones */
+            /* Smaller text on tiny phones */
             .hero-text h1 {
-                font-size: 1.9rem;
+                font-size: clamp(1.5rem, 8vw, 2rem);
+            }
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            .hero-text .subtitle {
+                font-size: 0.95rem;
+            }
+            body {
+                font-size: 15px;
             }
 
             /* Stack hero buttons vertically on phones */
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
+                width: 100%;
+            }
+            .hero-buttons .btn {
+                width: 100%;
+                text-align: center;
             }
 
             /* Approach section: collapse to 1 col on phones */
@@ -695,7 +709,7 @@
                 <p style="color: var(--accent); margin-bottom: 0.5rem; font-weight: 600; letter-spacing: 1px;">
                     SYSTEM.READY //</p>
                 <h1>Fahim Montasir</h1>
-                <p class="subtitle"><strong>Full-Stack Developer & Robotics Engineer</strong></p>
+                <p class="subtitle"><strong>Full-Stack Developer & Robotics Enthusiast</strong></p>
                 <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem;">
                     Building high-performance web applications with engineering precision. Blending front-end aesthetics
                     with robust hardware control, automation, and simulation-driven design.
