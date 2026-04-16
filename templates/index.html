@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fahim Montasir | Full-Stack Developer & Robotics Enthusiast</title>
+    <title>Fahim Montasir | Full-Stack Developer & Robotics Engineer</title>
     <!-- Inline SVG favicon to prevent 404 -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -189,7 +189,7 @@
         }
 
         .hero-text h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 1rem;
@@ -198,7 +198,7 @@
         }
 
         .hero-text .subtitle {
-            font-size: 1.1rem;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
             color: var(--text-muted);
             margin-bottom: 2rem;
         }
@@ -581,7 +581,7 @@
             }
 
             .hero-text h1 {
-                font-size: clamp(2rem, 6vw, 3.5rem);
+                font-size: clamp(1.9rem, 7vw, 2.8rem);
             }
 
             .hero-text .subtitle {
@@ -625,6 +625,7 @@
             /* Collapse about-stats to single column on phone */
             .about-stats {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
 
             /* Contact grid full width on small phones */
@@ -632,25 +633,16 @@
                 gap: 2rem;
             }
 
-            /* Smaller text on tiny phones */
-            .hero-text h1 {
-                font-size: clamp(1.5rem, 8vw, 2rem);
-            }
-            .section-header h2 {
-                font-size: 1.5rem;
-            }
-            .hero-text .subtitle {
-                font-size: 0.95rem;
-            }
-            /* Stack hero buttons vertically on phones */
+            /* Keep hero buttons inline on phones */
             .hero-buttons {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
                 width: 100%;
+                gap: 0.5rem;
             }
             .hero-buttons .btn {
-                width: 100%;
-                text-align: center;
+                width: auto;
+                padding: 0.8rem 1rem;
+                font-size: 0.85rem;
             }
 
             /* Approach section: collapse to 1 col on phones */
@@ -786,7 +778,7 @@
                 <div class="about-image">
                     <img src="https://i.ibb.co.com/Kx3RF0z3/image.png" alt="Robotics Lab">
                     <div class="about-image-caption">
-                        <strong style="color: var(--accent); font-size: clamp(0.85rem, 4vw, 1.1rem); letter-spacing: 0.5px; white-space: nowrap;">
+                        <strong style="color: var(--accent); font-size: clamp(0.85rem, 3.5vw, 1.1rem); letter-spacing: 0.5px; white-space: nowrap;">
                             MECHANICAL SOUL, ELECTRICAL PULSE
                         </strong>
                         <br>
